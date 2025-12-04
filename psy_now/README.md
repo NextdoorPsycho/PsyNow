@@ -1,0 +1,109 @@
+# PsyNow
+
+A GeForce NOW environment customization tool built with Flutter and the Arcane UI framework.
+
+## Overview
+
+PsyNow enhances your GeForce NOW gaming sessions by installing portable applications, custom shell environments, and managing system integrations - all without requiring permanent changes to the cloud VM.
+
+## Features
+
+- **Portable App Installation** - Extracts and installs bundled applications to `C:\PsyNow`
+- **Shell Environment Support** - Seelen UI and WinXShell desktop replacements
+- **Steam Integration** - Shuts down NVIDIA's Steam proxy to unlock full library access
+- **Shortcut Management** - Syncs desktop shortcuts between sessions
+- **Window Management** - Automatically closes unwanted GFN windows (CustomExplorer)
+- **System Tray** - Runs in background with minimize-to-tray support
+
+## Bundled Applications
+
+| App | Description |
+|-----|-------------|
+| 7-Zip | File archiver and manager |
+| Brave | Privacy-focused web browser |
+| Explorer++ | Windows Explorer replacement |
+| DepotDownloader | Steam depot/game downloader |
+| Notepad++ | Advanced text editor |
+| qBittorrent | BitTorrent client |
+| System Informer | System monitoring tool |
+| Epic Games Portable | Portable Epic Games launcher |
+| Epic Games Installer | GFN-compatible Epic installer |
+| Ctrl+Tab | Alt-Tab replacement utility |
+| Steam Web App | Lightweight Steam web interface |
+
+## Shell Environments
+
+| Shell | Description |
+|-------|-------------|
+| Seelen UI | Modern Windows shell replacement |
+| WinXShell | Classic shell with taskbar |
+| WinXShell Steam | Steam-themed variant |
+| WinXShell Ubisoft | Ubisoft-themed variant |
+
+## Building
+
+```bash
+# Get dependencies
+flutter pub get
+
+# Build Windows release
+flutter build windows --release
+```
+
+Output: `build/windows/x64/runner/Release/psy_now.exe`
+
+## Project Structure
+
+```
+lib/
+├── main.dart                 # Entry point with Pylon state management
+├── screens/
+│   ├── home_screen.dart      # Main dashboard
+│   ├── settings_screen.dart  # Configuration options
+│   └── logs_screen.dart      # Activity log viewer
+├── services/
+│   ├── app_installer.dart    # Extracts bundled apps from assets
+│   ├── config_service.dart   # INI configuration management
+│   ├── environment_service.dart  # GFN environment detection
+│   ├── shortcut_service.dart # Desktop shortcut sync
+│   ├── steam_service.dart    # Steam proxy shutdown
+│   └── window_service.dart   # Win32 window manipulation
+├── models/
+│   └── app_state.dart        # Application state
+└── utils/
+    ├── constants.dart        # App configuration and bundled app definitions
+    └── win32_utils.dart      # FFI bindings for Windows API
+
+assets/
+└── apps/                     # Bundled application archives
+    ├── 7-Zip.zip
+    ├── Brave.zip
+    ├── Explorer++.exe
+    └── ...
+```
+
+## Configuration
+
+Settings are stored in `C:\PsyNow\PsyNowConfig.ini`:
+
+- `SkipShortcutsCreation` - Skip creating desktop shortcuts
+- `SkipSeelenUiExecution` - Don't auto-launch Seelen UI
+- `BingWallpaperEnabled` - Enable daily Bing wallpaper
+
+## Technical Details
+
+- **Framework**: Flutter with Arcane UI (no Material Design)
+- **State Management**: Pylon with RxDart streams
+- **Windows API**: FFI bindings via `win32` package for FindWindow, SendMessage
+- **Asset Loading**: Flutter's rootBundle for bundled archives
+- **ZIP Extraction**: `archive` package for decompression
+
+## Requirements
+
+- Windows 10/11
+- GeForce NOW environment (optional - works outside GFN with limited features)
+- ~500MB disk space for bundled apps
+
+## License
+
+MIT
