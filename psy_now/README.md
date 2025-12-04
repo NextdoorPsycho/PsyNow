@@ -4,18 +4,18 @@ A GeForce NOW environment customization tool built with Flutter and the Arcane U
 
 ## Overview
 
-PsyNow enhances your GeForce NOW gaming sessions by installing portable applications, custom shell environments, and managing system integrations - all without requiring permanent changes to the cloud VM.
+PsyNow enhances your GeForce NOW gaming sessions by downloading and installing portable applications, custom shell environments, and managing system integrations - all without requiring permanent changes to the cloud VM.
 
 ## Features
 
-- **Portable App Installation** - Extracts and installs bundled applications to `C:\PsyNow`
+- **App Downloads & Installation** - Downloads portable apps from GitHub releases and extracts to `C:\PsyNow`
 - **Shell Environment Support** - Seelen UI and WinXShell desktop replacements
 - **Steam Integration** - Shuts down NVIDIA's Steam proxy to unlock full library access
 - **Shortcut Management** - Syncs desktop shortcuts between sessions
 - **Window Management** - Automatically closes unwanted GFN windows (CustomExplorer)
-- **System Tray** - Runs in background with minimize-to-tray support
+- **Progress Tracking** - Real-time download and extraction progress
 
-## Bundled Applications
+## Applications (Downloaded on Setup)
 
 | App | Description |
 |-----|-------------|
@@ -62,7 +62,8 @@ lib/
 │   ├── settings_screen.dart  # Configuration options
 │   └── logs_screen.dart      # Activity log viewer
 ├── services/
-│   ├── app_installer.dart    # Extracts bundled apps from assets
+│   ├── app_installer.dart    # Downloads and extracts apps
+│   ├── download_service.dart # HTTP download with progress
 │   ├── config_service.dart   # INI configuration management
 │   ├── environment_service.dart  # GFN environment detection
 │   ├── shortcut_service.dart # Desktop shortcut sync
@@ -71,16 +72,13 @@ lib/
 ├── models/
 │   └── app_state.dart        # Application state
 └── utils/
-    ├── constants.dart        # App configuration and bundled app definitions
+    ├── constants.dart        # App configuration and download URLs
     └── win32_utils.dart      # FFI bindings for Windows API
-
-assets/
-└── apps/                     # Bundled application archives
-    ├── 7-Zip.zip
-    ├── Brave.zip
-    ├── Explorer++.exe
-    └── ...
 ```
+
+## Download Source
+
+All applications are downloaded from [SalsaNOWThings](https://github.com/dpadGuy/SalsaNOWThings/releases/tag/Things) GitHub releases.
 
 ## Configuration
 
@@ -94,15 +92,16 @@ Settings are stored in `C:\PsyNow\PsyNowConfig.ini`:
 
 - **Framework**: Flutter with Arcane UI (no Material Design)
 - **State Management**: Pylon with RxDart streams
+- **Downloads**: HTTP client with streaming progress
 - **Windows API**: FFI bindings via `win32` package for FindWindow, SendMessage
-- **Asset Loading**: Flutter's rootBundle for bundled archives
 - **ZIP Extraction**: `archive` package for decompression
 
 ## Requirements
 
 - Windows 10/11
+- Internet connection (for downloading apps)
 - GeForce NOW environment (optional - works outside GFN with limited features)
-- ~500MB disk space for bundled apps
+- ~500MB disk space for installed apps
 
 ## License
 

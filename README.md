@@ -11,14 +11,14 @@ PsyNow transforms your GeForce NOW cloud gaming sessions by providing:
 - **Full Steam Library** - Bypass NVIDIA's Steam proxy to access your complete game library
 - **Persistent Shortcuts** - Keep your desktop organized across sessions
 
-All applications are bundled directly into the executable - no internet downloads required during setup.
+Applications are downloaded from GitHub on first run - no bloated installer required.
 
 ## Quick Start
 
 1. Download the latest release
 2. Run `psy_now.exe` on GeForce NOW
 3. Click "Run Setup"
-4. Your apps are installed to `C:\PsyNow`
+4. Apps download and install to `C:\PsyNow`
 
 ## Repository Structure
 
@@ -26,7 +26,6 @@ All applications are bundled directly into the executable - no internet download
 PsyNow/
 ├── psy_now/              # Flutter application source
 │   ├── lib/              # Dart source code
-│   ├── assets/apps/      # Bundled application archives
 │   └── README.md         # Detailed technical documentation
 ├── SalsaNOW/             # Original C# application (reference)
 └── README.md             # This file
@@ -58,10 +57,11 @@ PsyNow/
 
 1. **Environment Detection** - Checks for `C:\Asgard` (GFN marker)
 2. **Steam Proxy Shutdown** - POSTs to `127.10.0.231:9753/shutdown` to unlock full library
-3. **App Extraction** - Unpacks bundled ZIPs/EXEs from Flutter assets to `C:\PsyNow`
-4. **Shortcut Creation** - Places shortcuts on desktop
-5. **Shell Launch** - Optionally starts Seelen UI or WinXShell
-6. **Background Services** - Closes unwanted windows, syncs shortcuts
+3. **App Downloads** - Fetches apps from [SalsaNOWThings](https://github.com/dpadGuy/SalsaNOWThings/releases) GitHub releases
+4. **Extraction** - Unpacks ZIPs/EXEs to `C:\PsyNow`
+5. **Shortcut Creation** - Places shortcuts on desktop
+6. **Shell Launch** - Optionally starts Seelen UI or WinXShell
+7. **Background Services** - Closes unwanted windows, syncs shortcuts
 
 ## Building from Source
 
@@ -75,13 +75,14 @@ Executable output: `psy_now/build/windows/x64/runner/Release/psy_now.exe`
 
 ## Adding New Applications
 
-1. Place the archive in `psy_now/assets/apps/`
+1. Upload the app archive to [SalsaNOWThings releases](https://github.com/dpadGuy/SalsaNOWThings/releases)
 2. Add entry to `lib/utils/constants.dart`:
 
 ```dart
-BundledApp(
+DownloadableApp(
   name: 'App Name',
-  assetPath: 'assets/apps/AppName.zip',
+  downloadUrl: '$_baseUrl/AppName.zip',
+  fileName: 'AppName.zip',
   exeName: 'app.exe',
   isZip: true,
   createShortcut: true,

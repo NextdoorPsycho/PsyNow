@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:archive/archive.dart';
 import 'package:fast_log/fast_log.dart';
-import 'package:flutter/services.dart';
 import 'package:psy_now/services/config_service.dart';
+import 'package:psy_now/services/download_service.dart';
 import 'package:psy_now/services/environment_service.dart';
 import 'package:psy_now/services/shortcut_service.dart';
 import 'package:psy_now/utils/constants.dart';
 
-/// Service for installing bundled applications from local assets
+/// Service for downloading and installing applications
 class AppInstaller {
   final String globalDirectory;
   final ConfigService config;
@@ -22,7 +22,7 @@ class AppInstaller {
     this.onProgress,
   });
 
-  /// Install all bundled apps
+  /// Install all apps
   Future<void> installAll() async {
     for (final app in AppConstants.bundledApps) {
       await installApp(app);
@@ -34,8 +34,8 @@ class AppInstaller {
     }
   }
 
-  /// Install a single bundled app
-  Future<bool> installApp(BundledApp app) async {
+  /// Install a single app
+  Future<bool> installApp(DownloadableApp app) async {
     final desktopPath = EnvironmentService.getDesktopPath();
     final shortcutPath = '$desktopPath${Platform.pathSeparator}${app.name}.lnk';
 
@@ -55,7 +55,7 @@ class AppInstaller {
       if (app.isZip) {
         final dirExists = await Directory(appDir).exists();
         if (dirExists) {
-          onLog?.call('[!] ${app.name} already exists');
+          onLog?.call('[!] ${app.name} already installed');
           _maybeCreateShortcut(shortcutPath, exePath);
           _maybeRunApp(app, exePath);
           return true;
@@ -63,7 +63,7 @@ class AppInstaller {
       } else {
         final fileExists = await File(exePath).exists();
         if (fileExists) {
-          onLog?.call('[!] ${app.name} already exists');
+          onLog?.call('[!] ${app.name} already installed');
           _maybeCreateShortcut(shortcutPath, exePath);
           _maybeRunApp(app, exePath);
           return true;
@@ -73,24 +73,29 @@ class AppInstaller {
       onLog?.call('[+] Installing ${app.name}...');
       onProgress?.call(app.name, 0.0);
 
-      // Load asset from bundle
-      final ByteData assetData;
-      try {
-        assetData = await rootBundle.load(app.assetPath);
-      } catch (e) {
-        error('[AppInstaller] Asset not found: ${app.assetPath}');
-        onLog?.call('[!] Asset not found: ${app.assetPath}');
+      // Download the file
+      final bytes = await DownloadService.downloadFile(
+        app.downloadUrl,
+        onProgress: (progress) {
+          // Download is 0-50% of total progress
+          onProgress?.call(app.name, progress * 0.5);
+        },
+        onLog: onLog,
+      );
+
+      if (bytes == null) {
+        onLog?.call('[!] Failed to download ${app.name}');
         return false;
       }
 
-      final bytes = assetData.buffer.asUint8List();
       onProgress?.call(app.name, 0.5);
 
       if (app.isZip) {
         // Extract ZIP archive
         await _extractZip(bytes, appDir, app.name);
       } else {
-        // Copy single executable
+        // Save single executable
+        await Directory(globalDirectory).create(recursive: true);
         final file = File(exePath);
         await file.writeAsBytes(bytes);
       }
@@ -109,7 +114,8 @@ class AppInstaller {
     }
   }
 
-  Future<void> _extractZip(List<int> bytes, String destDir, String appName) async {
+  Future<void> _extractZip(
+      List<int> bytes, String destDir, String appName) async {
     final archive = ZipDecoder().decodeBytes(bytes);
 
     await Directory(destDir).create(recursive: true);
@@ -129,6 +135,7 @@ class AppInstaller {
       }
 
       processed++;
+      // Extraction is 50-100% of total progress
       onProgress?.call(appName, 0.5 + (0.5 * processed / total));
     }
   }
@@ -139,7 +146,7 @@ class AppInstaller {
     }
   }
 
-  void _maybeRunApp(BundledApp app, String exePath) {
+  void _maybeRunApp(DownloadableApp app, String exePath) {
     if (app.runAfterInstall) {
       info('[AppInstaller] Starting ${app.name}');
       Process.start(exePath, [], mode: ProcessStartMode.detached);

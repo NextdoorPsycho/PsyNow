@@ -33,94 +33,109 @@ class AppConstants {
   static const String shortcutsDir = 'Shortcuts';
   static const String backupShortcutsDir = 'Backup Shortcuts';
 
-  // Bundled apps configuration
-  static const List<BundledApp> bundledApps = [
+  // Base URL for app downloads
+  static const String _baseUrl =
+      'https://github.com/dpadGuy/SalsaNOWThings/releases/download/Things';
+
+  // Downloadable apps configuration
+  static const List<DownloadableApp> bundledApps = [
     // File manager
-    BundledApp(
+    DownloadableApp(
       name: '7-Zip',
-      assetPath: 'assets/apps/7-Zip.zip',
+      downloadUrl: '$_baseUrl/7-Zip.zip',
+      fileName: '7-Zip.zip',
       exeName: '7zFM.exe',
       isZip: true,
       createShortcut: true,
     ),
     // Web browser
-    BundledApp(
+    DownloadableApp(
       name: 'Brave',
-      assetPath: 'assets/apps/Brave.zip',
+      downloadUrl: '$_baseUrl/Brave.zip',
+      fileName: 'Brave.zip',
       exeName: 'brave.exe',
       isZip: true,
       createShortcut: true,
     ),
     // File explorer replacement
-    BundledApp(
+    DownloadableApp(
       name: 'Explorer++',
-      assetPath: 'assets/apps/Explorer++.exe',
+      downloadUrl: '$_baseUrl/Explorer%2B%2B.exe',
+      fileName: 'Explorer++.exe',
       exeName: 'Explorer++.exe',
       isZip: false,
       createShortcut: true,
       runAfterInstall: true,
     ),
     // Steam depot downloader
-    BundledApp(
+    DownloadableApp(
       name: 'DepotDownloader',
-      assetPath: 'assets/apps/DepotDownloader-windows-x64.zip',
+      downloadUrl: '$_baseUrl/DepotDownloader-windows-x64.zip',
+      fileName: 'DepotDownloader-windows-x64.zip',
       exeName: 'DepotDownloader.exe',
       isZip: true,
       createShortcut: true,
     ),
     // Text editor
-    BundledApp(
+    DownloadableApp(
       name: 'Notepad++',
-      assetPath: 'assets/apps/Notepad++.zip',
+      downloadUrl: '$_baseUrl/Notepad%2B%2B.zip',
+      fileName: 'Notepad++.zip',
       exeName: 'notepad++.exe',
       isZip: true,
       createShortcut: true,
     ),
     // Torrent client
-    BundledApp(
+    DownloadableApp(
       name: 'qBittorrent',
-      assetPath: 'assets/apps/qBittorrent.zip',
+      downloadUrl: '$_baseUrl/qBittorrent.zip',
+      fileName: 'qBittorrent.zip',
       exeName: 'qbittorrent.exe',
       isZip: true,
       createShortcut: true,
     ),
     // System monitor
-    BundledApp(
+    DownloadableApp(
       name: 'System Informer',
-      assetPath: 'assets/apps/System.Informer.zip',
+      downloadUrl: '$_baseUrl/System.Informer.zip',
+      fileName: 'System.Informer.zip',
       exeName: 'SystemInformer.exe',
       isZip: true,
       createShortcut: true,
     ),
     // Epic Games portable launcher
-    BundledApp(
+    DownloadableApp(
       name: 'Epic Games Portable',
-      assetPath: 'assets/apps/EpicGames.Portable.zip',
+      downloadUrl: '$_baseUrl/EpicGames.Portable.zip',
+      fileName: 'EpicGames.Portable.zip',
       exeName: 'EpicGamesLauncher.exe',
       isZip: true,
       createShortcut: true,
     ),
     // Epic Games installer for GFN
-    BundledApp(
+    DownloadableApp(
       name: 'Epic Games Installer',
-      assetPath: 'assets/apps/EpicGamesInstallerGFN.exe',
+      downloadUrl: '$_baseUrl/EpicGamesInstallerGFN.exe',
+      fileName: 'EpicGamesInstallerGFN.exe',
       exeName: 'EpicGamesInstallerGFN.exe',
       isZip: false,
       createShortcut: true,
     ),
     // Alt-Tab replacement
-    BundledApp(
+    DownloadableApp(
       name: 'Ctrl+Tab',
-      assetPath: 'assets/apps/ctrl_tab.exe',
+      downloadUrl: '$_baseUrl/ctrl_tab.exe',
+      fileName: 'ctrl_tab.exe',
       exeName: 'ctrl_tab.exe',
       isZip: false,
       createShortcut: false,
       runAfterInstall: true,
     ),
     // Steam Web App
-    BundledApp(
+    DownloadableApp(
       name: 'Steam Web App',
-      assetPath: 'assets/apps/SWA.zip',
+      downloadUrl: '$_baseUrl/SWA.zip',
+      fileName: 'SWA.zip',
       exeName: 'SWA.exe',
       isZip: true,
       createShortcut: true,
@@ -128,40 +143,45 @@ class AppConstants {
   ];
 
   // Shell environments (separate from apps)
-  static const List<BundledApp> shellEnvironments = [
-    BundledApp(
+  static const List<DownloadableApp> shellEnvironments = [
+    DownloadableApp(
       name: 'Seelen UI',
-      assetPath: 'assets/apps/seelenui.zip',
+      downloadUrl: '$_baseUrl/seelenui.zip',
+      fileName: 'seelenui.zip',
       exeName: 'seelen-ui.exe',
       isZip: true,
       createShortcut: false,
       runAfterInstall: true,
     ),
-    BundledApp(
+    DownloadableApp(
       name: 'Seelen UI Config',
-      assetPath: 'assets/apps/SeelenUiConfig.zip',
+      downloadUrl: '$_baseUrl/SeelenUiConfig.zip',
+      fileName: 'SeelenUiConfig.zip',
       exeName: '',
       isZip: true,
       createShortcut: false,
     ),
-    BundledApp(
+    DownloadableApp(
       name: 'WinXShell',
-      assetPath: 'assets/apps/WinXShell_x64.zip',
+      downloadUrl: '$_baseUrl/WinXShell_x64.zip',
+      fileName: 'WinXShell_x64.zip',
       exeName: 'WinXShell.exe',
       isZip: true,
       createShortcut: false,
       runAfterInstall: true,
     ),
-    BundledApp(
+    DownloadableApp(
       name: 'WinXShell Steam',
-      assetPath: 'assets/apps/WinXShell_Steam.zip',
+      downloadUrl: '$_baseUrl/WinXShell_Steam.zip',
+      fileName: 'WinXShell_Steam.zip',
       exeName: 'WinXShell.exe',
       isZip: true,
       createShortcut: false,
     ),
-    BundledApp(
+    DownloadableApp(
       name: 'WinXShell Ubisoft',
-      assetPath: 'assets/apps/WinXShell_Ubisoft.zip',
+      downloadUrl: '$_baseUrl/WinXShell_Ubisoft.zip',
+      fileName: 'WinXShell_Ubisoft.zip',
       exeName: 'WinXShell.exe',
       isZip: true,
       createShortcut: false,
@@ -169,18 +189,20 @@ class AppConstants {
   ];
 }
 
-/// Configuration for a bundled app
-class BundledApp {
+/// Configuration for a downloadable app
+class DownloadableApp {
   final String name;
-  final String assetPath;
+  final String downloadUrl;
+  final String fileName;
   final String exeName;
   final bool isZip;
   final bool createShortcut;
   final bool runAfterInstall;
 
-  const BundledApp({
+  const DownloadableApp({
     required this.name,
-    required this.assetPath,
+    required this.downloadUrl,
+    required this.fileName,
     required this.exeName,
     required this.isZip,
     this.createShortcut = false,
